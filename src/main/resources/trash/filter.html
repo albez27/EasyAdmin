@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<body style="background-color: #f8dfbe" class="d-flex flex-column min-vh-100">
+<header th:replace="fragments :: header" />
+<div class="container">
+    <div class="text-center" th:if="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+        <img th:src="@{/images/danger.png}" class="rounded" style="width: 50%; height: 50%; margin-top: 15%" alt="...">
+        <p style="color: white; font-size: 3vh">Пожалуйста, авторизируйтесь, чтобы получить досутп к статистике</p>
+    </div>
+    <div class="text-center" th:unless="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+        <tr th:each="instance : ${session.groups}">
+            <a th:href="@{/filter(id=${instance.key})}">
+                <button th:if="${session.selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-light rounded-pill"
+                        style="margin-top:7px; color: #e75449; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"
+                        th:text="${instance.value}">num</button>
+                <button th:unless="${session.selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-danger rounded-pill"
+                        style="margin-top:7px; color: #ffffff; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"
+                        th:text="${instance.value}">num</button>
+            </a>
+        </tr>
+        <div th:if="${session.selected}" class="jumbotron jumbotron-fluid">
+            <div class="container" style="background-color: white; height: 100vh; margin-top: 5vh; margin-bottom: 5vh">
+                <h1 class="display-4" style="padding-top: 1vh; color: #e75449; font-weight: 860; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);">Test</h1>
+                <form method="POST" th:action="@{/filter(id=${session.selected})}">
+                    <label for="filter" class="fs-4">Фильтр слов</label>
+                    <textarea class="form-control" id="filter" name="filter" rows="15"
+                              style="resize: block; display: block; box-sizing: border-box; height: 100%; max-height: 100%"
+                              placeholder="Важно! Слова в фильтр необходимо заносить только через ';" th:text="${session.filterText}"></textarea>
+                    <button type="submit" class="btn btn-success btn-lg btn-block" style="margin-top: 2vh">Сохранить фильтр слов</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments :: footer"  />
+</body>
+</html>

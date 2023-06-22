@@ -1,0 +1,300 @@
+.dropdown-item:hover{
+    background-color: white;
+}
+.dropdown-item:active{
+    color: black;
+}
+.sticky {
+    position: sticky;
+    width: 220px;
+    top: 2em;
+    min-height: 2em;
+    background-color: white;
+    border-radius: 10px;
+    padding-block: 5%;
+}
+.leftLinkMenu{
+    margin-left: 5%;
+    color: #686869;
+    max-width: 150px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.leftLinkMenu:hover{
+    color: #686869;
+}
+.leftLinkMenu:hover {}
+#leftDivMenu{
+    margin-bottom: 10px;
+}
+#leftDivMenu:hover{
+    background-color: white;
+    border-radius: 5px;
+}
+.groupInfoBlock{
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    border-radius: 10px;
+}
+.postBlock{
+    margin: 2% 0 2% 0;
+    width: 100%;
+    min-height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+}
+li{
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+ul{
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 7%;
+}
+.rightMenuImg{
+    width: 18px;
+    height: 18px;
+    margin-left: 4%;
+    margin-right: 3%;
+    margin-bottom: 2px;
+}
+.rightMenuItem{
+    margin-left: -7%;
+}
+.rightMenuItem:hover{
+    background-color: whitesmoke;
+    border-radius: 5px;
+}
+.paddingInlineOutline{
+    padding-inline: 3% ;
+    padding-top: 3%;
+}
+.postUpperDiv{
+
+}
+.postUpperDiv img{
+    width: 60px;
+    height: 60px;
+    border-radius: 30px
+}
+.postUpperDivGroupName {
+    margin-left: 2%;
+    color: black;
+    display: inline-flex;
+    flex-direction: column;
+}
+.postUpperDivGroupName a{
+    text-decoration: none;
+    color: black;
+}
+.postUpperDivGroupName a:hover{
+    text-decoration: underline;
+}
+.postUpperDivGroupName span{
+    font-size: 15px;
+
+}
+.postMainDiv{
+    padding-top: 2%;
+    color: black;
+    font-size: 22px;
+}
+.postBottomDiv{
+    padding-bottom: 2%;
+    bottom: 10%;
+    display: flex;
+    align-items: center;
+}
+.postBottomDiv img{
+    width: 25px;
+    height: 25px;
+}
+.postBottomDiv span{
+    margin-left: 7px;
+    font-size: 24px;
+}
+.postBottomDiv span:hover{
+    color: black;
+
+}
+.postBottomDivButton {
+    color: #686869;
+    display: flex;
+    align-items: center;
+}
+.postBottomDivButton:hover {
+    color: black;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+
+}
+.postBlockComments{
+    display: none;
+    border-top: solid white;
+}
+.postItemsComments{
+    color: black;
+    border-bottom: 1px solid whitesmoke;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.postItemsDate{
+    font-size: 10px;
+}
+.postCloseButton{
+    visibility: hidden;
+    position: absolute;
+    right: 30px;
+}
+.postItemsComments:hover> .postCloseButton{
+    visibility: visible;
+    cursor: pointer;
+}
+.postChangeScore{
+    visibility: hidden;
+    position: absolute;
+    right: 60px;
+}
+.postItemsComments:hover> .postChangeScore{
+    visibility: visible;
+    cursor: pointer;
+}
+.postRecoverButton{
+    visibility: hidden;
+    position: absolute;
+    right: 60px;
+}
+.postItemsComments:hover> .postRecoverButton{
+    visibility: visible;
+    cursor: pointer;
+}
+.dropdown-toggle{
+    color: black;
+}
+.dropdown-toggle:hover{
+    color: #686869;
+}
+.show{
+    display: block;
+}
+.noHover{
+    pointer-events: none;
+}
+.rightMenuItemA{
+    color: black;
+    text-decoration: none;
+}
+.rightMenuItemA:hover{
+    color: black;
+}
+.bgColor {
+    background-color: whitesmoke;
+}
+.bgColorHeader {
+    background-color: white;
+}
+.logo {
+    color: black;
+}
+.logo img {
+    width: 36px;
+    height: 36px;
+}
+.logo a {
+    vertical-align: middle;
+    color: black;
+}
+.user{
+    display: flex;
+    justify-content: flex-end;
+}
+.dropdownMenuUser {
+    background-color: white;
+}
+.dropdownMenuUser a {
+    color: #919191;
+}
+.groupPhoto{
+    width: 24px;
+    height: 24px;
+    margin-left: 2%
+}
+.groupInfoBlockName{
+    line-height: 99px;
+    margin-left: 2%;
+    color: black;
+}
+.postBlockLikes{
+    color: #686869;
+}
+.toPost{
+    position: absolute; margin-left: 10px;  color: black;
+}
+.toPost:hover{
+    text-decoration: underline;
+}
+.NavMenuItems{
+    display: inline-block;
+    margin-right: 2%
+}
+.NavMenuItems:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+.hide{
+    display: none;
+}
+.delete{
+    display: none;
+}
+.postBlockMenu {
+    color: black;
+    height: 60px;
+    padding-block: 20px;
+    padding-inline: 20px;
+    border-bottom: whitesmoke solid;
+}
+.filterTextArea{
+    background-color: whitesmoke;
+    border: #434346;
+    color: black;
+}
+.filterTextAreaSpan {
+    color: #868686;
+}
+.filterTextAreaButton {
+    background-color: #1e88e5;
+    border-radius: 10px;
+    display: block;
+}
+.filterTextAreaButton:hover{
+    background-color: #2197ff;
+}
+.dark-input{
+    background-color: whitesmoke;
+    color: black;
+    padding-inline: 10px;
+    border: solid white;
+    border-radius: 10px;
+}
+.attention {
+    color: black;
+}
+.borderStatistic{
+    border-bottom: 2px whitesmoke solid;
+}
+.divBlockStatistic {
+    background-color: white;
+    margin-top: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<body style="background-color: #f8dfbe" class="d-flex flex-column min-vh-100">
+<header th:replace="fragments :: header" />
+<div class="container">
+    <div class="text-center" th:unless="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+        <tr th:each="instance : ${groups}" style="opacity: 0%">
+            <a th:href="@{/(id=${instance.key})}" style="opacity: 0">
+                <button th:if="${selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-light rounded-pill"
+                        style="margin-top:7px; color: #e75449; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15); opacity: 0"
+                        th:text="${instance.value}">num</button>
+                <button th:unless="${selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-danger rounded-pill"
+                        style="margin-top:7px; color: #ffffff; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15); opacity: 0"
+                        th:text="${instance.value}">num</button>
+            </a>
+        </tr>
+        <div th:if="${selected}" class="jumbotron jumbotron-fluid">
+            <div class="container" style="background-color: white; height: 15vh; margin-top: 5vh; margin-bottom: 5vh">
+                <form th:action="@{/analyze(id=${selected})}" method="GET">
+                    <input type="hidden" name="id" th:value="${selected}">
+                    <div class="mb-3">
+                        <label for="linkForPost" class="form-label">Введите ссылку на пост</label>
+                        <input type="text" required class="form-control" th:value="${link}" name="link" id="linkForPost">
+                    </div>
+                    <button type="submit" class="btn btn-success">Анализировать</button>
+                </form>
+            </div>
+            <div th:each="el : ${comments}" style="color: white; font-weight: 660; font-size: 2vh ">
+                <div th:if="${#strings.substring(el, #strings.length(el)-1, #strings.length(el)).equals('1')}" class="container " style="background-color: #64a93a; height: 15vh; margin-top: 5vh; margin-bottom: 5vh">
+                    <span th:text="${#strings.substring(el, 0, #strings.length(el)-1)}"></span>
+                </div>
+                <div th:unless="${#strings.substring(el, #strings.length(el)-1, #strings.length(el)).equals('1')}" class="container " style="background-color: #e75449; height: 15vh; margin-top: 5vh; margin-bottom: 5vh">
+                    <span th:text="${#strings.substring(el, 0, #strings.length(el)-1)}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments :: footer"  />
+</body>
+</html>

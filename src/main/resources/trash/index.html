@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<body style="background-color: #222222" class="d-flex flex-column min-vh-100">
+<header th:replace="fragments :: header" />
+<div class="container">
+    <div class="text-center" th:if="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+        <img th:src="@{/images/danger.png}" class="rounded" style="width: 50%; height: 50%; margin-top: 15%" alt="...">
+        <p style="color: white; font-size: 3vh">Пожалуйста, авторизируйтесь, чтобы получить досутп к статистике</p>
+    </div>
+    <div class="text-center" th:unless="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+        <tr th:each="instance : ${groups}">
+            <a th:href="@{/(id=${instance.key})}">
+                <button th:if="${selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-light rounded-pill"
+                style="margin-top:7px; color: #e75449; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"
+                th:text="${instance.value}">num</button>
+                <button th:unless="${selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-danger rounded-pill"
+                        style="margin-top:7px; color: #ffffff; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"
+                        th:text="${instance.value}">num</button>
+            </a>
+        </tr>
+        <div th:if="${selected}" class="jumbotron jumbotron-fluid">
+            <div class="container" style="background-color: white; height: 100vh; margin-top: 5vh; margin-bottom: 5vh">
+                <h1 class="display-4" th:text="${name}" style="padding-top: 4vh; color: #e75449; font-weight: 860; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"></h1>
+                <div style="height: 60vh; margin: 4vh">
+                    <img th:src="@{/images/graph.png}" style="width: 55%">
+                </div>
+                <div class="container">
+                    <div class="row" style="margin-top: 2vh">
+                        <div class="col">
+                            <p style="color: #e75449; font-weight: 860; font-size: 2vh">Количество<br>отрицательных<br> комментариев</p>
+                            <div style="background-color: #ff9f94; width: 50%; height: 7vh; display: inline-block;" class="rounded-pill">
+                                <span style="display: inline-block; vertical-align: middle; line-height: normal; margin-top: 1.2vh; font-size: 3vh; color: white">0</span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <p style="color: #64a93a; font-weight: 860; font-size: 2vh">Количество<br>положительных<br> комментариев</p>
+                            <div style="background-color: #a8f27a; width: 50%; height: 7vh; display: inline-block; vertical-align: middle;" class="rounded-pill">
+                                <span style="display: inline-block; vertical-align: middle; line-height: normal; margin-top: 1.2vh; font-size: 3vh; color: white">4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments :: footer"  />
+</body>
+</html>

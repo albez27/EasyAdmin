@@ -1,0 +1,17 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+
+</head>
+<body class="d-flex flex-column min-vh-100 bgColor">
+<header th:replace="fragments :: header"></header>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments :: col1"></div>
+        <div th:replace="post :: post">
+
+        </div>
+        <div th:replace="fragments :: col3"></div>
+    </div>
+</div>
+<script th:replace="fragments :: scriptShowComment"></script>
+</body>

@@ -1,0 +1,90 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+
+</head>
+<body class="d-flex flex-column min-vh-100 bgColor">
+<header th:replace="fragments :: header"></header>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments :: col1"></div>
+        <div class="col-8">
+            <div class="groupInfoBlock">
+                <span class="align-middle fs-4 groupInfoBlockName"  th:text="'Комментарии сообщества - ' + ${session.name}">
+
+                </span>
+            </div>
+            <div class="postBlock">
+                <div class="postBlockMenu">
+                    <div class="NavMenuItems" onclick="showAll()">
+                        <span>Все комментарии</span>
+                    </div>
+                    <div class="NavMenuItems" onclick="showPos()">
+                        <span>Только положительные</span>
+                    </div>
+                    <div class="NavMenuItems" onclick="showNeg()">
+                        <span>Только отрицательные</span>
+                    </div>
+                    <div class="NavMenuItems" onclick="showNeg()">
+                        <span>Помеченные фильтром</span>
+                    </div>
+                </div>
+                <div class="paddingInlineOutline">
+
+                    <div class="postItemsComments" th:each="el : ${session.allComments}"  th:classappend="${el.getScore() == 0 ? 'neg' : 'pos'}" th:id="${el.getId()}">
+                        <div class="postRecoverButton"  title="Убрать комментарий из корзины" th:attr="onclick=|returnComment('${el.getId()}')|"><img th:src="@{/images/back.png}" style="width: 15px; height: 15px;"></div>
+                        <div class="postCloseButton" title="Удалить комментарий" th:attr="onclick=|deleteComment('${el.getId()}')|"><img th:src="@{/images/close.png}" style="width: 15px; height: 15px;"></div>
+                        <img th:src="${el.getCommentatorPhoto()}" style="width: 35px; height: 35px; margin-right: 5px;  border-radius: 30px">
+                        <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                                <span th:text="${el.getUserName()}"></span>
+                                <span class="postItemsDate" th:text="${el.getDateComment()}"></span>
+                            </span>
+                        <a href="@"><span class="toPost">к записи</span></a>
+                        <span th:text="${el.getComment()}" style="display: block; margin-top: 20px "></span>
+                        <span style="display: block">
+                 <span style="display: flex; justify-content: flex-end;">
+                <img th:src="@{/images/negative-vote.png}" style="display: flex; justify-content: flex-end; width: 24px; height: 24px" th:if="${el.getScore() == 0}">
+                <img th:src="@{/images/thumbs.png}" style="display: flex; justify-content: flex-end; width: 24px; height: 24px" th:if="${el.getScore() == 1}">
+                    </span>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div th:replace="fragments :: col3"></div>
+    </div>
+</div>
+<script>
+    function showNeg(){
+        let elem = $('.pos');
+        let hidden = $('.hide');
+        console.log(hidden)
+        if(hidden.length !== 0){
+            hidden.removeClass('hide')
+        }
+        elem.addClass('hide');
+    }
+    function showPos(){
+        let elem = $('.neg');
+        let hidden = $('.hide');
+        console.log(hidden)
+        if(hidden.length !== 0){
+            hidden.removeClass('hide')
+        }
+        elem.addClass('hide')
+    }
+    function showAll(){
+        let hidden = $('.hide');
+        hidden.removeClass('hide');
+    }
+    function deleteComment(id){
+        $('#' + id).addClass('delete');
+        $.get(location.origin + "/eraseComment_api", {'idsDel': id})
+    }
+    function returnComment(id){
+        $('#' + id).addClass('delete');
+        $.get(location.origin + "/recoverComment_api", {'id': id})
+    }
+</script>
+</body>

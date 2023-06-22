@@ -1,0 +1,5 @@
+spring:
+  message: Hekko
+
+server:
+  port: 8081

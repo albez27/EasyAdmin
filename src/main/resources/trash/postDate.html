@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<style>
+  div.div {
+    display: block;
+    position: relative;
+    text-align: left;
+    top: 30px;
+    left:-70px;
+    width: 100px;
+    height: 50px;
+    background: white;
+    margin-top: 5px;
+    transition: left .2s linear;
+  }
+
+  div.div:hover {
+    left: 0px;
+  }
+  .sidenav {
+    width: 150px;
+    position: absolute;
+    z-index: 1;
+    top: 20%;
+    left: 10px;
+    background: #ffffff;
+    overflow-x: hidden;
+    padding: 8px 0;
+    box-shadow: inset 0px 0px 5px 5px #f8dfbe;
+  }
+
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #e75449;
+    display: block;
+  }
+  .selected {
+    outline: 1px solid #e75449;
+  }
+
+  .sidenav a:hover {
+    color: #e8786e;
+  }
+  .items {
+
+  }
+  .items:hover {
+    outline: 1px solid #e75449;
+  }
+  .analyze{
+    display: inline-block;
+  }
+</style>
+<body style="background-color: #f8dfbe" class="d-flex flex-column min-vh-100">
+<header th:replace="fragments :: header" />
+<div class="text-center" th:unless="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+  <tr th:each="instance : ${session.groups}">
+    <a th:href="@{/posts/all(id=${instance.key})}" style="text-decoration: none">
+      <button th:if="${session.selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-light rounded-pill"
+              style="margin-top:7px; margin-bottom: 5vh; color: #e75449; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"
+              th:text="${instance.value}">num</button>
+      <button th:unless="${session.selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-danger rounded-pill"
+              style="margin-top:7px; margin-bottom: 5vh; color: #ffffff; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15); "
+              th:text="${instance.value}">num</button>
+    </a>
+  </tr>
+</div>
+
+<input type="hidden" class="hInput" th:name="id" th:value="${session.selected}">
+<div>
+  <h1 class="display-4" style="padding-top: 1vh; margin-left: 2vh; color: #e75449; font-weight: 860; text-shadow: 1px 2px 1px rgba(0,0,0,0.15); position: sticky; display: inline-block ">
+    Посты
+    <button class="btn btn-success analyze" disabled onclick="analyze()">Анализировать комментарии у выбранных постов</button>
+  </h1>
+  <label class="fs-4">Выбрать даты <input type="date"> - <input type="date"></label>
+</div>
+
+<div class="container" style="overflow-y: auto; max-height: 70vh; max-width: 100%">
+  <div th:if="${session.selected}" class="jumbotron jumbotron-fluid">
+    <div class="container" style="background-color: #f0f0f0; margin-bottom: 5vh; max-width: 100%">
+      <div style="display: flex; flex-wrap: wrap">
+        <div th:each="el : ${postsH}" class="card items" style="width: 20rem; flex-shrink: 0; margin: 10px" >
+          <input type="checkbox" id="hCheckBox" class="pointer" th:value="${el.getId()}" style="display: none">
+          <div class="card-body" >
+            <h5 class="card-title" th:utext="${#strings.append('Пост #', el.getIdPostVk())}"></h5>
+            <p class="card-text" th:text="${el.getText()}"></p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" th:utext="${#strings.append('Количество комментариев ', el.getCountComments())}"></li>
+            <li class="list-group-item" th:utext="${#strings.append('Количество лайков ', el.getLikes())}"></li>
+            <li class="list-group-item" th:utext="${#strings.append('Дата создания ', el.getDatePost())}"></li>
+          </ul>
+          <div class="card-body" style="height: 5rem; max-height: 5rem">
+            <a th:href="${el.getLinkToPost()}" target="_blank" class="card-link">Ссылка на пост</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.value = 0;
+  $('div.card').click(function(){
+    if($(this).hasClass('selected')){
+      $(this).removeClass('selected')
+      $(this).children().each(function(){
+        if($(this).hasClass('pointer')){
+          $(this).prop('checked', false);
+        }
+      })
+      window.value -= 1;
+    }
+    else {
+      $(this).children().each(function(){
+        if($(this).hasClass('pointer')){
+          $(this).prop('checked', true);
+        }
+      })
+      $(this).addClass('selected')
+      window.value += 1;
+    }
+    $('button.analyze').attr('disabled', window.value === 0)
+  });
+
+  function checkboxes() {
+    let selected = [];
+    $('.pointer:checked').each(function () {
+      selected.push($(this).val());
+    });
+    return selected
+  }
+
+  function analyze(){
+    let selected = checkboxes();
+    location.href = location.origin + location.pathname + "/analyze" + location.search + "&posts=" + selected.toString()
+  }
+  // $(location).prop('href', location.pathname)
+  // $.get("/posts/all?id=163860514&posts=1",
+  //         {'posts[]': selected},
+  //         function( data ) {
+  //           $( ".result" ).html( data );
+  //           alert( selected );});
+  // // $.get("/posts/all/analyze",
+  // //         {'posts[]': selected})
+</script>
+
+
+
+
+<footer th:replace="fragments :: footer"  />
+</body>
+</html>

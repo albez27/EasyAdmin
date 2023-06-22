@@ -1,0 +1,95 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+
+</head>
+<body class="d-flex flex-column min-vh-100 bgColor">
+<header th:replace="fragments :: header"></header>
+<div class="container">
+  <div class="row">
+    <div th:replace="fragments :: col1"></div>
+    <div class="col-8">
+      <div class="groupInfoBlock" style="height: auto">
+                <span class="align-middle fs-4 groupInfoBlockName" th:text="'Статистика сообщества - ' + ${session.name}">
+                </span>
+      </div>
+        <div class="row">
+            <div class="col" style="align-content: stretch; display: grid">
+                <div style="background-color: white; margin-top: 10px; border-radius: 10px; display: flex; justify-content: center">
+                    <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                        <span style="text-align: center" class="fs-5">Всего комментариев</span>
+                        <br>
+                        <span style="text-align: center" class="fs-4" th:text="${session.countComment}"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col" style="align-content: stretch; display: grid">
+                <div style="background-color: white; margin-top: 10px; border-radius: 10px; display: flex; justify-content: center">
+                    <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                        <span style="text-align: center" class="fs-5">Положительных комментариев</span>
+                        <span style="text-align: center" class="fs-4" th:text="${session.countPos}"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col" style="align-content: stretch; display: grid">
+                <div style="background-color: white; margin-top: 10px; border-radius: 10px; display: flex; justify-content: center">
+                    <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                        <span style="text-align: center" class="fs-5">Отрицательных комментариев</span>
+                        <span style="text-align: center" class="fs-4" th:text="${session.countNeg}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="align-content: stretch; display: grid">
+                <div style="background-color: white; margin-top: 10px; border-radius: 10px; display: flex; justify-content: center">
+                    <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                        <span style="text-align: center" class="fs-5 borderStatistic">Пост с наибольшим количеством комментариев</span>
+                            <span style="text-align: center" class="fs-6" th:text="${session.postMax.getText()}"></span>
+                            <span style="text-align: center" class="fs-6" th:text="${session.postMax.getDatePost()}"></span>
+                            <div class="postBottomDiv paddingInlineOutline" style="display: flex; justify-content: center;">
+                                <img th:src="@{/images/heart.png}"><span class="postBlockLikes fs-6" th:text="${session.postMax.getLikes()}"></span>
+                                  <div class="postBottomDivButton noHover">
+                                    <img th:src="@{/images/comment.png}" style="margin-left: 10px"><span class="fs-6" th:text="${session.postMax.getCountComments()}"></span>
+                                  </div>
+                            </div>
+                    </span>
+                </div>
+            </div>
+            <div class="col" style="align-content: stretch; display: grid">
+                <div style="background-color: white; margin-top: 10px; border-radius: 10px; display: flex; justify-content: center">
+                    <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                        <span style="text-align: center; font-size: 18px" class="borderStatistic">Пост с наибольшим количеством отрицательных комментариев</span>
+                            <span style="text-align: center" class="fs-6" th:text="${session.postMax.getText()}"></span>
+                            <span style="text-align: center" class="fs-6" th:text="${session.postMax.getDatePost()}"></span>
+                            <div class="postBottomDiv paddingInlineOutline" style="display: flex; justify-content: center;">
+                                <img th:src="@{/images/heart.png}"><span class="postBlockLikes fs-6" th:text="${session.postMax.getLikes()}"></span>
+                                  <div class="postBottomDivButton noHover">
+                                    <img th:src="@{/images/comment.png}" style="margin-left: 10px"><span class="fs-6" th:text="${session.postMax.getCountComments()}"></span>
+                                  </div>
+                            </div>
+                    </span>
+                </div>
+            </div>
+            <div class="col" style="align-content: stretch; display: grid">
+                <div style="background-color: white; margin-top: 10px; border-radius: 10px; display: flex; justify-content: center">
+                    <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                        <span style="text-align: center; font-size: 18px" class="borderStatistic">Пост с наибольшим количеством положительных комментариев</span>
+                            <span style="text-align: center" class="fs-6" th:text="${session.postMax.getText()}"></span>
+                            <span style="text-align: center" class="fs-6" th:text="${session.postMax.getDatePost()}"></span>
+                            <div class="postBottomDiv paddingInlineOutline" style="display: flex; justify-content: center;">
+                                <img th:src="@{/images/heart.png}"><span class="postBlockLikes fs-6" th:text="${session.postMax.getLikes()}"></span>
+                                  <div class="postBottomDivButton noHover">
+                                    <img th:src="@{/images/comment.png}" style="margin-left: 10px"><span class="fs-6" th:text="${session.postMax.getCountComments()}"></span>
+                                  </div>
+                            </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div th:replace="fragments :: col3"></div>
+  </div>
+</div>
+<script th:replace="fragments :: scriptShowComment"></script>
+</body>

@@ -1,0 +1,110 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100 bgColor">
+<header th:replace="fragments :: header"></header>
+<div class="container">
+  <div class="row">
+    <div th:replace="fragments :: col1"></div>
+    <div class="col-8">
+      <div class="groupInfoBlock">
+        <span class="align-middle fs-4 groupInfoBlockName"
+              th:text="'Выбрать посты по дате для сообщества - ' + ${session.name}">
+        </span>
+      </div>
+      <div class="postBlock" style="min-height: auto">
+        <div class="postBlockMenu">
+          <span> Выберите даты: <input type="date" th:value="${session.selectedMin}" th:min="${session.minDate}" th:max="${session.maxDate}" class="dark-input" id="startDate">
+              - <input class="dark-input" th:attr="disabled=${session.maxDate == null ? 'disabled' : null}" th:value="${session.selectedMax}" type="date" id="endDate" disabled th:min="${session.minDate}" th:max="${session.maxDate}"></span>
+        </div>
+        <div class="paddingInlineOutline">
+            <div th:each="el : ${session.postsSelected}" class="postBlock" th:name="${el.getDatePost()}">
+                <div class="postUpperDiv paddingInlineOutline">
+                    <img th:src="${session.photo}">
+                    <span class="align-middle fs-4 postUpperDivGroupName">
+                <a th:href="'https://vk.com/'" th:text="${session.name}" class=""></a>
+                <span th:text="${el.getDatePost()}"></span>
+            </span>
+
+                </div>
+                <!-- Блок с постами   СЕРЕДИНА    -->
+                <div class="postMainDiv paddingInlineOutline">
+                    <span th:text="${el.getText()}"></span>
+                </div>
+                <!-- Блок с постами   ЦЕНТР    -->
+                <div class="postBottomDiv paddingInlineOutline">
+                    <img th:src="@{/images/heart.png}"><span class="postBlockLikes" th:text="${el.getLikes()}"></span>
+                    <div class="postBottomDivButton"  th:classappend="${el.getCountComments() == 0 ? 'noHover' : ''}" th:attr="onclick=|showComment('${el.getId()}')|">
+                        <img th:src="@{/images/comment.png}" style="margin-left: 10px"><span th:text="${el.getCountComments()}"></span>
+                    </div>
+                </div>
+                <!--        Комментарии, по умолчанию display:none-->
+                <div class="postBlockComments paddingInlineOutline" th:id="${el.getId()}">
+                    <div class="postItemsComments" th:each="com : ${session.commentsRepo.getAllByPosts(el)}">
+                        <div class="postCloseButton"><img th:src="@{/images/close.png}" style="width: 15px; height: 15px;"></div>
+                        <img th:src="${com.getCommentatorPhoto()}" style="width: 35px; height: 35px; margin-right: 5px;  border-radius: 30px">
+                        <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                <span th:text="${com.getUserName()}"></span>
+                <span class="postItemsDate" th:text="${com.getDateComment()}"></span>
+              </span>
+                        <span th:text="${com.getComment()}" style="display: block"></span>
+                        <span style="display: block">
+
+<!--                 <span th:text="${com.getScore() == 0 ? 'Отрицательный' : 'Положительный'} + ' комментарий'"-->
+                            <!--                       style="display: flex; justify-content: flex-end;" th:styleappend="${com.getScore() == 0 ? 'color: red' : 'color: #64a93a'}"></span>-->
+            <span style="display: flex; justify-content: flex-end;">
+                <img th:src="@{/images/negative-vote.png}" style="display: flex; justify-content: flex-end; width: 24px; height: 24px" th:if="${com.getScore() == 0}">
+                <img th:src="@{/images/thumbs.png}" style="display: flex; justify-content: flex-end; width: 24px; height: 24px" th:if="${com.getScore() == 1}">
+            </span>
+        </span>
+
+                    </div>
+                </div>
+            </div>
+          <div th:if="${session.postsSelected == null}" style=" display: flex; justify-content: center; padding-bottom: 30px">
+            <span class="attention">Здесь будут выведены посты, которые подходят под условие</span>
+          </div>
+<!--          <div class="postItemsComments" th:each="el : ${session.allComments}"  th:classappend="${el.getScore() == 0 ? 'neg' : 'pos'}" th:id="${el.getId()}">-->
+<!--            <div class="postRecoverButton"  title="Убрать комментарий из корзины"><img th:src="@{/images/back.png}" style="width: 15px; height: 15px;"></div>-->
+<!--            <div class="postCloseButton" title="Удалить комментарий" th:attr="onclick=|deleteComment('${el.getId()}')|"><img th:src="@{/images/close.png}" style="width: 15px; height: 15px;"></div>-->
+<!--            <img th:src="${session.photo}" style="width: 35px; height: 35px; margin-right: 5px;  border-radius: 30px">-->
+<!--            <span style="display: inline-flex; vertical-align: super; flex-direction: column">-->
+<!--                                <span th:text="${el.getUserName()}"></span>-->
+<!--                                <span class="postItemsDate" th:text="${el.getDateComment()}"></span>-->
+<!--                            </span>-->
+<!--            <a href="@"><span class="toPost">к записи</span></a>-->
+<!--            <span th:text="${el.getComment()}" style="display: block; margin-top: 20px "></span>-->
+<!--            <span style="display: block">-->
+<!--                 <span th:text="${el.getScore() == 0 ? 'Отрицательный' : 'Положительный'} + ' комментарий'"-->
+<!--                       style="display: flex; justify-content: flex-end;" th:styleappend="${el.getScore() == 0 ? 'color: red' : 'color: #64a93a'}"></span>-->
+<!--              </span>-->
+
+<!--          </div>-->
+        </div>
+      </div>
+
+    </div>
+    <div th:replace="fragments :: col3"></div>
+  </div>
+</div>
+<script>
+    document.getElementById("startDate").addEventListener("change", function() {
+        var input = this.value;
+        $("#endDate").removeAttr('disabled')
+    });
+    document.getElementById("endDate").addEventListener("change", function() {
+        var input = this.value;
+        var min = $("#startDate").val()
+        $.get(location.origin + '/datePosts_api', {'min': min, 'max': input}, function (){
+            window.location.reload()
+        })
+    });
+    // function selectDateStart(){
+    //     $.get(location.origin + '/datePosts_api',{'min': }, function (){
+    //         window.location.reload();
+    //     })
+    // }
+</script>
+</body>

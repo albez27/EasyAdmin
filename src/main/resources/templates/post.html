@@ -1,0 +1,67 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="col-8" th:fragment="post" th:if="${T(com.albez.web.Utilities.Authorization).isAuth()}">
+  <!-- Верхний блок с названием группы     -->
+  <div class="groupInfoBlock" >
+    <img th:src="${session.photo}" style="width: 60px; height: 60px; margin-left: 2%; border-radius: 30px">
+    <span class="align-middle fs-4 groupInfoBlockName" th:text="${session.name}"></span>
+  </div>
+  <!-- Блок с постами   ВВЕРХ    -->
+  <div th:each="el : ${session.posts}" class="postBlock">
+    <div class="postUpperDiv paddingInlineOutline">
+      <img th:src="${session.photo}">
+      <span class="align-middle fs-4 postUpperDivGroupName">
+                <a th:href="'https://vk.com/'" th:text="${session.name}" class=""></a>
+                <span th:text="${el.getDatePost()}"></span>
+            </span>
+
+    </div>
+    <!-- Блок с постами   СЕРЕДИНА    -->
+    <div class="postMainDiv paddingInlineOutline">
+      <span th:text="${el.getText()}"></span>
+    </div>
+    <!-- Блок с постами   ЦЕНТР    -->
+    <div class="postBottomDiv paddingInlineOutline">
+      <img th:src="@{/images/heart.png}"><span class="postBlockLikes" th:text="${el.getLikes()}"></span>
+      <div class="postBottomDivButton"  th:classappend="${el.getCountComments() == 0 ? 'noHover' : ''}" th:attr="onclick=|showComment('${el.getId()}')|">
+        <img th:src="@{/images/comment.png}" style="margin-left: 10px"><span th:text="${el.getCountComments()}"></span>
+      </div>
+    </div>
+    <!--        Комментарии, по умолчанию display:none-->
+    <div class="postBlockComments paddingInlineOutline" th:id="${el.getId()}">
+      <div class="postItemsComments" th:each="com : ${session.commentsRepo.getAllByPosts(el)}" th:id="${com.getId() + '_'}">
+        <div class="postCloseButton" th:attr="onclick=|deleteComment('${com.getId()}')|"><img th:src="@{/images/close.png}" style="width: 15px; height: 15px;"></div>
+        <img th:src="${com.getCommentatorPhoto()}" style="width: 35px; height: 35px; margin-right: 5px;  border-radius: 30px">
+        <span style="display: inline-flex; vertical-align: super; flex-direction: column">
+                <span th:text="${com.getUserName()}"></span>
+                <span class="postItemsDate" th:text="${com.getDateComment()}"></span>
+              </span>
+        <span th:text="${com.getComment()}" style="display: block"></span>
+        <span style="display: block">
+
+<!--                 <span th:text="${com.getScore() == 0 ? 'Отрицательный' : 'Положительный'} + ' комментарий'"-->
+<!--                       style="display: flex; justify-content: flex-end;" th:styleappend="${com.getScore() == 0 ? 'color: red' : 'color: #64a93a'}"></span>-->
+            <span style="display: flex; justify-content: flex-end;">
+                <img th:src="@{/images/negative-vote.png}" style="display: flex; justify-content: flex-end; width: 24px; height: 24px" th:if="${com.getScore() == 0}">
+                <img th:src="@{/images/thumbs.png}" style="display: flex; justify-content: flex-end; width: 24px; height: 24px" th:if="${com.getScore() == 1}">
+            </span>
+        </span>
+
+      </div>
+    </div>
+  </div>
+    <script>
+        function deleteComment(id){
+            $('#' + id + '_').addClass('delete');
+            $.get(location.origin + "/eraseComment_api", {'idsDel': id})
+        }
+    </script>
+</div>
+
+<div class="col-8" th:unless="${T(com.albez.web.Utilities.Authorization).isAuth()}" th:fragment="post">
+    <div>
+        <div class="groupInfoBlock">
+            <span class="align-middle fs-4" style="    line-height: 99px;
+    margin-left: 2%; color: white" >Аторизируйтесь, пожалуйста, чтобы получить доступ к приложению</span>
+        </div>
+    </div>
+</div>

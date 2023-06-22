@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<style>
+  .items:hover {
+    outline: 1px solid #e75449;
+  }
+  .selected {
+    outline: 1px solid #e75449;
+  }
+</style>
+<body style="background-color: #f8dfbe" class="d-flex flex-column min-vh-100">
+<header th:replace="fragments :: header"></header>
+<div class="text-center" th:unless="${!T(com.albez.web.Utilities.Authorization).isAuth()}">
+    <tr th:each="instance : ${session.groups}">
+        <a th:href="@{/ondelete(id=${instance.key})}" style="text-decoration: none">
+            <button th:if="${session.selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-light rounded-pill"
+                    style="margin-top:7px; margin-bottom: 5vh; color: #e75449; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15);"
+                    th:text="${instance.value}">num</button>
+            <button th:unless="${session.selected} != ${instance.key}" type="button" th:id="${instance.key}"  class="btn btn-danger rounded-pill"
+                    style="margin-top:7px; margin-bottom: 5vh; color: #ffffff; font-weight: 660; text-shadow: 1px 2px 1px rgba(0,0,0,0.15); "
+                    th:text="${instance.value}">num</button>
+        </a>
+    </tr>
+</div>
+<div class="text-center">
+
+    <h1 th:text="'Корзина сообщества ' + ${session.groups.get(session.selected)}" class="display-4" style="padding-top: 1vh; margin-left: 2vh; margin-bottom: 5vh; color: #e75449; font-weight: 860; text-shadow: 1px 2px 1px rgba(0,0,0,0.15); position: sticky; display: inline-block ">
+        Комментарии на уд сообщества
+    </h1>
+    <div class="fs-4">
+        <label>
+            <input type="radio" name="rd" id="rb1" style="transform: scale(1.5); margin: 0 1vh 0 1vh" onclick="selectAll()">Выбрать всё
+        </label>
+        <label>
+            <input type="radio" name="rd" id="rb2" style="transform: scale(1.5); margin: 0 1vh 0 1vh" onclick="selectAllPositive()">Выбрать все положительные
+        </label>
+        <label>
+            <input type="radio" name="rd" id="rb3" style="transform: scale(1.5); margin: 0 1vh 0 1vh " onclick="selectAllNegative()">Выбрать все отрицательные
+        </label>
+        <!--        <label>-->
+        <!--            <input type="checkbox" style="transform: scale(1.5); margin: 0 1vh 0 1vh">Выбрать все отрицательные-->
+        <!--        </label>-->
+
+    </div>
+    <input class="btn btn-danger btn-del" style="width: 200px; margin: 0 0 10px 0" type="button" value="Удалить комментарии" disabled onclick="deleteSel()">
+    <input class="btn btn-success btn-ret" style="width: 200px; margin: 0 0 10px 0" type="button" value="Вернуть комментарии" disabled onclick="returnSel()">
+    <div class="container" style=" max-width: 100%">
+        <div  class="jumbotron jumbotron-fluid">
+            <section style="background-color: #e7effd;">
+                <div style="display: flex">
+                    <div class="row" style="padding-inline: 20px">
+                        <div th:each="el : ${commentsToDelete}" th:if="${!el.isDeleted()}" class="col-sm" style="padding-top: 20px;">
+                            <div class="d-flex flex-start mb-4"  th:classappend="${el.getScore() == 0 ? 'neg' : 'pos'}">
+                                <input type="checkbox" class="pointer" th:value="${el.getId()}" style="display: none">
+                                <div class="card w-100">
+                                    <div class="card-body p-4 items">
+                                        <div class="">
+                                            <h5 th:text="${el.getUserName()}"></h5>
+                                            <p class="small" th:text="'Дата комментария: ' + ${el.getDateComment()}"></p>
+                                            <p th:text="${el.getComment()}">
+
+                                            </p>
+
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center" th:switch="${el.getScore()}">
+                                                    <span th:case="0" class="text-danger  fw-bolder fs-6">Отрицательный</span>
+                                                    <span th:case="1" class="text-success fw-bolder fs-6">Положительный</span>
+                                                </div>
+                                                <a th:href="'https://vk.com/id' + ${el.getIdCommentator()}"  target="_blank" class="link-muted"><i class="fas fa-reply me-1"></i>Ссылка на профиль</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<script>
+    var selectedG = []
+
+    window.value = 0;
+    $('div.d-flex').click(function(){
+        if($(this).hasClass('selected')){
+            $(this).removeClass('selected')
+            $(this).children().each(function(){
+                if($(this).hasClass('pointer')){
+                    $(this).prop('checked', false);
+                }
+            })
+        }
+        else {
+            $(this).children().each(function(){
+                if($(this).hasClass('pointer')){
+                    $(this).prop('checked', true);
+                }
+            })
+            $(this).addClass('selected')
+        }
+        selectedG = checkboxes()
+
+        console.log(selectedG)
+        $('.btn-del').attr('disabled', selectedG.length === 0)
+        $('.btn-ret').attr('disabled', selectedG.length === 0)
+    });
+
+    function selectAllNegative(){
+
+        let all = $('.neg').each(function (){
+            $(this).addClass('selected')
+        })
+        let allPos = $('.pos').each(function (){
+            $(this).removeClass('selected')
+        })
+        let selected = []
+        let temp = $('.selected').each(function (){
+            let test = $(this).find("input").val()
+            selected.push(test)
+        });
+        selectedG = selected;
+        $('.btn-del').attr('disabled', selectedG.length === 0)
+        $('.btn-ret').attr('disabled', selectedG.length === 0)
+        console.log(selectedG)
+    }
+    function selectAllPositive(){
+
+        let all = $('.pos').each(function (){
+            $(this).addClass('selected')
+        })
+        let allNeg = $('.neg').each(function (){
+            $(this).removeClass('selected')
+        })
+        let selected = []
+        let temp = $('.selected').each(function (){
+            let test = $(this).find("input").val()
+            selected.push(test)
+        });
+        selectedG = selected;
+        $('.btn-del').attr('disabled', selectedG.length === 0)
+        $('.btn-ret').attr('disabled', selectedG.length === 0)
+        console.log(selectedG)
+    }
+    function selectAll(){
+        let all = $('.neg').each(function (){
+            $(this).addClass('selected')
+        })
+        let allPos = $('.pos').each(function (){
+            $(this).addClass('selected')
+        })
+        let selected = []
+        let temp = $('.selected').each(function (){
+            let test = $(this).find("input").val()
+            selected.push(test)
+        });
+        selectedG = selected;
+        $('.btn-del').attr('disabled', selectedG.length === 0)
+        $('.btn-ret').attr('disabled', selectedG.length === 0)
+        console.log(selectedG)
+    }
+    function deleteSel(){
+        let arrStr = JSON.stringify(selectedG);
+        console.log(arrStr)
+        $.get(location.origin + "/deleteComAPI", {'idsDel': selectedG.toString()}, function (){
+            window.location.reload();
+        })
+    }
+    function returnSel(){
+        let arrStr = JSON.stringify(selectedG);
+        console.log(arrStr)
+        $.get(location.origin + "/returnAPI", {'idsRet': selectedG.toString()}, function (){
+            window.location.reload();
+        })
+    }
+    function checkboxes(array) {
+        let selected = [];
+        if(array){
+            $('.pointer:checked').each(function () {
+                array.push($(this).val());
+            });
+            return array
+        }
+        else{
+            $('.pointer:checked').each(function () {
+                selected.push($(this).val());
+            });
+            return selected
+        }
+    }
+</script>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

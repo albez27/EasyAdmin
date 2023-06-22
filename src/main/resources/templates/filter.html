@@ -1,0 +1,35 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+
+</head>
+<body class="d-flex flex-column min-vh-100 bgColor">
+<header th:replace="fragments :: header"></header>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments :: col1"></div>
+        <div class="col-8">
+            <div class="groupInfoBlock" style="height: auto">
+                <span class="align-middle fs-4 groupInfoBlockName" th:text="'Фильтр слов сообщества - ' + ${session.name}">
+                </span>
+                <form method="POST" th:action="@{/filter(id=${session.selected})}">
+                    <div class="form-group" style="padding-inline: 2%; padding-bottom: 2%;">
+
+                        <textarea name="filter"
+                                  class="form-control filterTextArea" id="exampleFormControlTextarea1" rows="3" th:text="${session.filterText}"></textarea>
+                        <span class="filterTextAreaSpan">Перечислите ключевые слова через запятую.</span>
+                        <div style=" display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-secondary filterTextAreaButton">Сохранить</button>
+
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+        <div th:replace="fragments :: col3"></div>
+    </div>
+</div>
+<script th:replace="fragments :: scriptShowComment"></script>
+</body>
